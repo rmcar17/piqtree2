@@ -22,6 +22,7 @@ jobs:
           submodules: recursive
 
       - name: Get IQ-TREE 2 SHA
+        shell: bash
         run: |
           cd iqtree2
           IQ_TREE_2_SHA=$(git rev-parse HEAD)
