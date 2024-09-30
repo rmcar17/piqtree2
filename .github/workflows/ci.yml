@@ -36,6 +36,7 @@ jobs:
           lookup-only: true
       
       - name: Build IQ-TREE
+        shell: bash
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
