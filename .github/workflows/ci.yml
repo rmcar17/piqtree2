@@ -13,7 +13,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-13, macos-14] # Intel linux, Intel Mac, ARM Mac
+        os: [windows-latest] # [ubuntu-latest, macos-13, macos-14, windows-latest] # Intel linux, Intel Mac, ARM Mac, Windows
 
     steps:
       - uses: "actions/checkout@v4"
@@ -39,6 +39,8 @@ jobs:
         run: |
           if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
             sudo ./build_tools/before_all_linux.sh
+          elif [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+            bash ./build_tools/before_all_windows.sh
           else
             ./build_tools/before_all_mac.sh
           fi
@@ -49,8 +51,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-13, macos-14] # Intel linux, Intel Mac, ARM Mac
-        python-version: ["3.9", "3.10", "3.11", "3.12"] 
+        os: [windows-latest] # [ubuntu-latest, macos-13, macos-14, windows-latest] # Intel linux, Intel Mac, ARM Mac
+        python-version: ["3.12"] #["3.9", "3.10", "3.11", "3.12"] 
     steps:
       - uses: "actions/checkout@v4"
         with:
