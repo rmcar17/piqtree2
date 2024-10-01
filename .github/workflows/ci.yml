@@ -51,6 +51,8 @@ jobs:
           if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
             sudo ./build_tools/before_all_linux.sh
           elif [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+            -DBoost_INCLUDE_DIR=${{steps.install-boost.outputs.BOOST_ROOT}}/include\
+            -DBoost_LIBRARY_DIRS=${{steps.install-boost.outputs.BOOST_ROOT}}/lib
             bash ./build_tools/before_all_windows.sh
           else
             ./build_tools/before_all_mac.sh
