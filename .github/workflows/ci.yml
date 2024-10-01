@@ -45,26 +45,24 @@ jobs:
           toolset: mingw
       
       - name: Build IQ-TREE
-        shell: bash
+        shell: cmd
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
-            sudo ./build_tools/before_all_linux.sh
-          elif [[ "${{ matrix.os }}" == "windows-latest" ]]; then
-            choco install -y llvm --version=14.0.6 --allow-downgrade
-            choco install -y eigen
-            choco install -y make
-
-            cd iqtree2
-            rm -rf build
-            mkdir build && cd build
-            cmake -G "MinGW Makefiles" -DBoost_INCLUDE_DIR=${{steps.install-boost.outputs.BOOST_ROOT}}/include -DBoost_LIBRARY_DIRS=${{steps.install-boost.outputs.BOOST_ROOT}}/lib -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_FLAGS=--target=x86_64-pc-windows-gnu -DCMAKE_CXX_FLAGS=--target=x86_64-pc-windows-gnu -DCMAKE_MAKE_PROGRAM=mingw32-make -DIQTREE_FLAGS="single" -DBUILD_LIB=ON ..
-            make -j
-            cd ../..
-            mv iqtree2/build/libiqtree2.a src/piqtree2/_libiqtree/
-          else
-            ./build_tools/before_all_mac.sh
-          fi
+          choco install -y llvm --version=14.0.6 --allow-downgrade
+          choco install -y eigen
+          cd iqtree2
+          if exist build rd /s /q build
+          mkdir build
+          cd build
+          cmake -G "MinGW Makefiles" ^
+            -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ ^
+            -DCMAKE_C_FLAGS=--target=x86_64-pc-windows-gnu ^
+            -DCMAKE_CXX_FLAGS=--target=x86_64-pc-windows-gnu ^
+            -DCMAKE_MAKE_PROGRAM=mingw32-make ^
+            -DBoost_INCLUDE_DIR=${{steps.install-boost.outputs.BOOST_ROOT}}/include ^
+            -DBoost_LIBRARY_DIRS=${{steps.install-boost.outputs.BOOST_ROOT}}/lib ^
+            -DIQTREE_FLAGS="cpp14" ..
+          make -j
 
   tests:
     name: Run Tests with Python ${{matrix.python-version}} on ${{matrix.os}}
