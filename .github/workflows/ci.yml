@@ -35,6 +35,15 @@ jobs:
           path: src/piqtree2/_libiqtree/libiqtree2.a
           lookup-only: true
       
+      - name: Install Boost
+        uses: MarkusJx/install-boost@v2.4.5
+        id: install-boost
+        if: steps.cache.outputs.cache-hit != 'true' && matrix.os == 'windows-latest'
+        with:
+          boost_version: 1.84.0
+          platform_version: 2022
+          toolset: mingw
+      
       - name: Build IQ-TREE
         shell: bash
         if: steps.cache.outputs.cache-hit != 'true'
