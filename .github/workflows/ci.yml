@@ -50,10 +50,12 @@ jobs:
         run: |
           choco install -y llvm --version=14.0.6 --allow-downgrade
           choco install -y eigen
-          cd iqtree2
-          rm -rf build
+          cd iqtree2 || exit
+          if [ -d "build" ]; then
+              rm -rf build
+          fi
           mkdir build
-          cd build
+          cd build || exit
           cmake -G "MinGW Makefiles" ^
             -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ ^
             -DCMAKE_C_FLAGS=--target=x86_64-pc-windows-gnu ^
