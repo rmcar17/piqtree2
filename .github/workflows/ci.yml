@@ -99,6 +99,7 @@ jobs:
             echo "LIB: $LIB"  # Debug output
             export LIB=$(echo $LIB | tr ':' ';')
             echo "Converted LIB: $LIB"  # Debug output
+            ls D:/a/piqtree2/piqtree2/vcpkg/installed/x64-windows/lib
           fi
           pip install nox
           nox -s test-${{ matrix.python-version }} -- --cov --cov-report=lcov:${{matrix.os}}-${{matrix.python-version}}.lcov --cov-report=term --cov-append --durations=20  
