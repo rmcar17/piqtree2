@@ -83,6 +83,7 @@ jobs:
 
       - name: Install zlib
         if: matrix.os == 'windows-latest'
+        shell: bash
         run: |
           git clone https://github.com/microsoft/vcpkg.git
           cd vcpkg
@@ -93,7 +94,7 @@ jobs:
           echo "##vso[task.setvariable variable=PATH]$(pwd)/vcpkg:$PATH"
           echo "##vso[task.setvariable variable=LIB]$(pwd)/vcpkg/installed/x64-windows/lib"
           echo "LIB set to: $(pwd)/vcpkg/installed/x64-windows/lib"
-  
+
       - name: Run Nox Testing
         shell: bash
         run: |
@@ -104,8 +105,7 @@ jobs:
             echo "Converted LIB: $LIB"  # Debug output
           fi
           pip install nox
-          nox -s test-${{ matrix.python-version }} -- --cov --cov-report=lcov:${{matrix.os}}-${{matrix.python-version}}.lcov --cov-report=term --cov-append --durations=20
-  
+          nox -s test-${{ matrix.python-version }} -- --cov --cov-report=lcov:${{matrix.os}}-${{matrix.python-version}}.lcov --cov-report=term --cov-append --durations=20  
   
       - name: Coveralls Parallel
         if: matrix.os != 'macos-13'
