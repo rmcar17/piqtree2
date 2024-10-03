@@ -85,6 +85,7 @@ jobs:
         shell: bash
         run: |
           if [[ "$RUNNER_OS" == "Windows" ]]; then
+            ls src/piqtree2/_libiqtree/
             mv src/piqtree2/_libiqtree/libiqtree.a src/piqtree2/_libiqtree/iqtree2.lib
           fi
           pip install nox
