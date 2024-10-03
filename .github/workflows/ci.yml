@@ -94,7 +94,8 @@ jobs:
         shell: bash
         run: |
           if [[ "$RUNNER_OS" == "Windows" ]]; then
-            export LIB="$(pwd)/vcpkg/installed/x64-windows/lib" 
+            export LIB="$(pwd)/vcpkg/installed/x64-windows/lib"
+            export LIBPATH="$LIB"
             mv src/piqtree2/_libiqtree/libiqtree2.a src/piqtree2/_libiqtree/iqtree2.lib
             echo "LIB: $LIB"  # Debug output
             export LIB=$(echo $LIB | tr ':' ';')
