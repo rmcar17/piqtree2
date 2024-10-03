@@ -1,6 +1,10 @@
+# Setup directories
+
 cd iqtree2
 rm -rf build
 mkdir build && cd build
+
+# Initialise cmake
 
 cmake_cmd="cmake -DIQTREE_FLAGS='single' -DBUILD_LIB=ON .."
 
@@ -13,6 +17,11 @@ fi
 
 eval $cmake_cmd
 
+# Build IQ
+
 make -j
+
+# Move to piqtree2 directory
+
 cd ../..
 mv iqtree2/build/libiqtree2.a src/piqtree2/_libiqtree/
