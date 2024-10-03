@@ -48,6 +48,15 @@ jobs:
         shell: bash
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
+          if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
+            sudo ./build_tools/before_all_linux.sh
+          elif [[ "${{ matrix.os }}" == "macos-latest" ]]; then
+            ./build_tools/before_all_mac.sh
+          elif [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+            # Set the BOOST_ROOT from the previous step
+            BOOST_ROOT="${{ steps.install-boost.outputs.BOOST_ROOT }}"
+            ./build_tools/before_all_windows.sh
+          fi
           echo "BOOST_ROOT=${{ steps.install-boost.outputs.BOOST_ROOT }}" >> $GITHUB_ENV
           BOOST_ROOT="${{ steps.install-boost.outputs.BOOST_ROOT }}"
           Boost_INCLUDE_DIR="$BOOST_ROOT\\include"
