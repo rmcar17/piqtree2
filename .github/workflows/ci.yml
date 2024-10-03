@@ -81,6 +81,10 @@ jobs:
           path: src/piqtree2/_libiqtree/libiqtree2.a
           fail-on-cache-miss: true
 
+      - name: Install zlib
+        if: matrix.os == 'windows-latest'
+        run: choco install -y zlib
+      
       - name: Run Nox Testing
         shell: bash
         run: |
