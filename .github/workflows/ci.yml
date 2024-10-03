@@ -91,12 +91,15 @@ jobs:
           cd ..
           echo "##vso[task.setvariable variable=VCPKG_ROOT]$(pwd)/vcpkg"
           echo "##vso[task.setvariable variable=PATH]$(pwd)/vcpkg:$PATH"
+          echo "##vso[task.setvariable variable=LIB]$(pwd)/vcpkg/installed/x64-windows/lib"
       
       - name: Run Nox Testing
         shell: bash
         run: |
           if [[ "$RUNNER_OS" == "Windows" ]]; then
             mv src/piqtree2/_libiqtree/libiqtree2.a src/piqtree2/_libiqtree/iqtree2.lib
+            export LIB=$(echo $LIB | tr ':' ';')
+            echo $LIB
           fi
           pip install nox
           nox -s test-${{ matrix.python-version }} -- --cov --cov-report=lcov:${{matrix.os}}-${{matrix.python-version}}.lcov --cov-report=term --cov-append --durations=20
