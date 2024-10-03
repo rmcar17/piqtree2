@@ -45,13 +45,13 @@ jobs:
           toolset: mingw
       
       - name: Build IQ-TREE
-        shell: cmd
+        shell: bash
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           choco install -y llvm --version=14.0.6 --allow-downgrade
           choco install -y eigen
           cd iqtree2
-          if exist build rd /s /q build
+          rm -rf build
           mkdir build
           cd build
           cmake -G "MinGW Makefiles" ^
