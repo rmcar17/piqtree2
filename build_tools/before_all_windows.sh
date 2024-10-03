@@ -1,6 +1,8 @@
 choco install -y llvm --version=14.0.6 --allow-downgrade
 choco install -y eigen
 
+export BOOST_ROOT="$(choco list --local-only | grep boost | awk '{print $1}')"
+
 # bash build_tools/build_iqtree.sh
 cd iqtree2
 rm -rf build

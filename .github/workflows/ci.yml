@@ -48,18 +48,17 @@ jobs:
         shell: bash
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          choco install -y llvm --version=14.0.6 --allow-downgrade
-          choco install -y eigen
-          cd iqtree2 || exit
-          if [ -d "build" ]; then
-              rm -rf build
-          fi
-          mkdir build
-          cd build || exit
-          export BOOST_ROOT="$(choco list --local-only | grep boost | awk '{print $1}')"
-          echo "Hi"
+          echo "BOOST_ROOT=${{ steps.install-boost.outputs.BOOST_ROOT }}" >> $GITHUB_ENV
           echo $BOOST_ROOT
-          echo ${BOOST_ROOT}
+          
+          choco install -y llvm --version=14.0.6 --allow-downgrade
+          choco install -y 
+          
+          cd iqtree2 
+          rm -rf build
+          mkdir build
+          cd build
+          
           cmake -G "MinGW Makefiles" \
             -DIQTREE_FLAGS="cpp14" -DIQTREE_FLAGS="single" -DBUILD_LIB=ON ..
           make -j
