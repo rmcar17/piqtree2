@@ -83,7 +83,7 @@ jobs:
 
       - name: Install zlib
         if: matrix.os == 'windows-latest'
-        run: choco install -y zlib
+        run: choco install -y zlib --version 1.2.11
       
       - name: Run Nox Testing
         shell: bash
