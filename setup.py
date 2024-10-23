@@ -10,7 +10,7 @@ ext_modules = [
         "_piqtree2",
         ["src/piqtree2/_libiqtree/_piqtree2.cpp"],
         library_dirs=[LIBRARY_DIR],
-        libraries=["iqtree2", "z"],
+        libraries=["iqtree2"],
     ),
 ]
 
