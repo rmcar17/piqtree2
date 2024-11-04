@@ -82,14 +82,18 @@ jobs:
           path: src/piqtree2/_libiqtree/libiqtree2.a
           fail-on-cache-miss: true
 
-      - name: Install zlib
+      - name: Install vcpkg
         if: matrix.os == 'windows-latest'
-        shell: bash
         run: |
           git clone https://github.com/microsoft/vcpkg.git
           cd vcpkg
-          ./bootstrap-vcpkg.bat -disableMetrics
-          ./vcpkg/vcpkg install zlib:x64-windows-static
+          git checkout master
+          ./bootstrap-vcpkg.bat
+      
+      - name: Install zlib with vcpkg
+        if: matrix.os == 'windows-latest'
+        run: |
+          vcpkg/vcpkg install zlib:x64-windows-static
 
       - name: Run Nox Testing
         shell: bash
