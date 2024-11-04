@@ -48,9 +48,6 @@ jobs:
         shell: bash
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          cd iqtree2
-          git apply ../z.patch
-          cd ..
           if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
             sudo ./build_tools/before_all_linux.sh
           elif [[ "${{ matrix.os }}" == "macos-13" || "${{ matrix.os }}" == "macos-14" ]]; then
@@ -67,7 +64,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-13, macos-14, windows-latest] # Intel linux, Intel Mac, ARM Mac
+        os: [ubuntu-latest, macos-13, macos-14, windows-latest] # Intel linux, Intel Mac, ARM Mac, Intel Windows
         python-version: ["3.9", "3.10", "3.11", "3.12"] 
     steps:
       - uses: "actions/checkout@v4"
@@ -85,22 +82,20 @@ jobs:
           path: src/piqtree2/_libiqtree/libiqtree2.a
           fail-on-cache-miss: true
 
-      # - name: Install zlib
-      #   if: matrix.os == 'windows-latest'
-      #   shell: bash
-      #   run: |
-      #     git clone https://github.com/microsoft/vcpkg.git
-      #     cd vcpkg
-      #     ./bootstrap-vcpkg.bat -disableMetrics
-      #     ./vcpkg install zlib
+      - name: Install zlib
+        if: matrix.os == 'windows-latest'
+        shell: bash
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git
+          cd vcpkg
+          ./bootstrap-vcpkg.bat -disableMetrics
+          ./vcpkg/vcpkg install zlib:x64-windows-static
 
       - name: Run Nox Testing
         shell: bash
         run: |
           if [[ "$RUNNER_OS" == "Windows" ]]; then
-            export LIBPATH="$LIB"
             mv src/piqtree2/_libiqtree/libiqtree2.a src/piqtree2/_libiqtree/iqtree2.lib
-            echo "Converted LIB: $(echo $LIB | tr ':' ';')"  # Debug output
           fi
           pip install nox
           nox -s test-${{ matrix.python-version }} -- --cov --cov-report=lcov:${{matrix.os}}-${{matrix.python-version}}.lcov --cov-report=term --cov-append --durations=20  
