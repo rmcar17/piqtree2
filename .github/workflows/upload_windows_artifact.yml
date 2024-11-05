@@ -1,4 +1,4 @@
-name: CI
+name: Upload Windows Library
 
 on:
   workflow_dispatch:
