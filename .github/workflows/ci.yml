@@ -43,7 +43,20 @@ jobs:
           boost_version: 1.84.0
           platform_version: 2022
           toolset: mingw
+
+      - name: Install vcpkg
+        if: matrix.os == 'windows-latest'
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git
+          cd vcpkg
+          git checkout master
+          ./bootstrap-vcpkg.bat
       
+      - name: Install zlib with vcpkg
+        if: matrix.os == 'windows-latest'
+        run: |
+          vcpkg/vcpkg install zlib:x64-windows-static
+
       - name: Build IQ-TREE
         shell: bash
         if: steps.cache.outputs.cache-hit != 'true'
@@ -57,6 +70,13 @@ jobs:
             
             ./build_tools/before_all_windows.sh
           fi
+
+      - uses: actions/upload-artifact@v4
+        if: matrix.os == 'windows-latest'
+        with:
+          name: Windows IQ-TREE Library
+          path: src/piqtree2/_libiqtree/libiqtree2.a
+  
 
   tests:
     name: Run Tests with Python ${{matrix.python-version}} on ${{matrix.os}}
