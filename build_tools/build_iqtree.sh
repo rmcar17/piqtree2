@@ -6,8 +6,8 @@ mkdir build && cd build
 
 echo "hello"
 echo $ZLIB_ROOT
-ls $(ZLIB_ROOT)/lib
-ls $(ZLIB_INCLUDE_DIR)/include
+ls $ZLIB_ROOT/lib
+ls $ZLIB_INCLUDE_DIR/include
 
 # Initialise cmake
 
