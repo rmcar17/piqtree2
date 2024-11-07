@@ -5,6 +5,7 @@ rm -rf build
 mkdir build && cd build
 
 echo "hello"
+echo $BOOST_ROOT
 echo $ZLIB_ROOT
 ls $ZLIB_ROOT/lib
 ls $ZLIB_INCLUDE_DIR/include
