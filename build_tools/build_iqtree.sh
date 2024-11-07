@@ -18,6 +18,8 @@ if [[ "$RUNNER_OS" == "Windows" ]]; then
   cmake_cmd="cmake -G 'MinGW Makefiles' \
     -DBoost_INCLUDE_DIR='$BOOST_ROOT/include' \
     -DBoost_LIBRARY_DIRS='$BOOST_ROOT/lib' \
+    -DZLIB_LIBRARY='$ZLIB_LIBRARY' \
+    -DZLIB_INCLUDE_DIR='$ZLIB_INCLUDE_DIR' \
     -DIQTREE_FLAGS='single' -DBUILD_LIB=ON .."
 fi
 
