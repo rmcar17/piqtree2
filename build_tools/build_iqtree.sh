@@ -7,8 +7,8 @@ mkdir build && cd build
 echo "hello"
 echo $BOOST_ROOT
 echo $ZLIB_ROOT
-ls $ZLIB_ROOT/include
-ls $ZLIB_ROOT/lib
+ls $ZLIB_ROOT\\include
+ls $ZLIB_ROOT\\lib
 
 # Initialise cmake
 
@@ -18,8 +18,8 @@ if [[ "$RUNNER_OS" == "Windows" ]]; then
   cmake_cmd="cmake -G 'MinGW Makefiles' \
     -DBoost_INCLUDE_DIR='$BOOST_ROOT/include' \
     -DBoost_LIBRARY_DIRS='$BOOST_ROOT/lib' \
-    -DZLIB_INCLUDE_DIR='$ZLIB_ROOT/include' \
-    -DZLIB_LIBRARY='$ZLIB_ROOT/lib' \
+    -DZLIB_INCLUDE_DIR='$ZLIB_ROOT\\include' \
+    -DZLIB_LIBRARY='$ZLIB_ROOT\\lib' \
     -DIQTREE_FLAGS='single' -DBUILD_LIB=ON .."
 fi
 
