@@ -1,76 +1,75 @@
-# name: Upload Windows Library
+name: Upload Windows Library
 
-# on:
-#   workflow_dispatch:
-#   push:
+on:
+  workflow_dispatch:
 
-# jobs:
-#   build-iqtree:
-#     name: Fetch or Build IQ-TREE 2 Static Library on Windows
-#     runs-on: windows-latest
+jobs:
+  build-iqtree:
+    name: Fetch or Build IQ-TREE 2 Static Library on Windows
+    runs-on: windows-latest
 
-#     steps:
-#       - uses: "actions/checkout@v4"
-#         with:
-#           fetch-depth: 0
-#           submodules: recursive
+    steps:
+      - uses: "actions/checkout@v4"
+        with:
+          fetch-depth: 0
+          submodules: recursive
 
-#       - name: Get IQ-TREE 2 SHA
-#         shell: bash
-#         run: |
-#           cd iqtree2
-#           IQ_TREE_2_SHA=$(git rev-parse HEAD)
-#           echo "IQ_TREE_2_SHA=${IQ_TREE_2_SHA}" >> $GITHUB_ENV
+      - name: Get IQ-TREE 2 SHA
+        shell: bash
+        run: |
+          cd iqtree2
+          IQ_TREE_2_SHA=$(git rev-parse HEAD)
+          echo "IQ_TREE_2_SHA=${IQ_TREE_2_SHA}" >> $GITHUB_ENV
 
-#       - uses: actions/cache@v4
-#         id: cache
-#         with:
-#           key: libiqtree-windows-latest-${{ env.IQ_TREE_2_SHA }}
-#           path: src/piqtree2/_libiqtree/libiqtree2.a
-#           lookup-only: true
+      - uses: actions/cache@v4
+        id: cache
+        with:
+          key: libiqtree-windows-latest-${{ env.IQ_TREE_2_SHA }}
+          path: src/piqtree2/_libiqtree/libiqtree2.a
+          lookup-only: true
       
-#       - name: Install Boost
-#         uses: MarkusJx/install-boost@v2.4.5
-#         id: install-boost
-#         if: steps.cache.outputs.cache-hit != 'true' && matrix.os == 'windows-latest'
-#         with:
-#           boost_version: 1.84.0
-#           platform_version: 2022
-#           toolset: mingw
+      - name: Install Boost
+        uses: MarkusJx/install-boost@v2.4.5
+        id: install-boost
+        if: steps.cache.outputs.cache-hit != 'true' && matrix.os == 'windows-latest'
+        with:
+          boost_version: 1.84.0
+          platform_version: 2022
+          toolset: mingw
       
-#       - name: Build IQ-TREE
-#         shell: bash
-#         if: steps.cache.outputs.cache-hit != 'true'
-#         run: |
-#           export BOOST_ROOT="${{ steps.install-boost.outputs.BOOST_ROOT }}"
-#           ./build_tools/before_all_windows.sh
+      - name: Build IQ-TREE
+        shell: bash
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          export BOOST_ROOT="${{ steps.install-boost.outputs.BOOST_ROOT }}"
+          ./build_tools/before_all_windows.sh
 
-#   tests:
-#     name: Upload Library
-#     needs: build-iqtree
-#     runs-on: windows-latest
+  tests:
+    name: Upload Library
+    needs: build-iqtree
+    runs-on: windows-latest
     
-#     steps:
-#       - uses: "actions/checkout@v4"
-#         with:
-#           fetch-depth: 0
-#           submodules: recursive
+    steps:
+      - uses: "actions/checkout@v4"
+        with:
+          fetch-depth: 0
+          submodules: recursive
           
           
-#       - uses: actions/cache/restore@v4
-#         with:
-#           key: libiqtree-windows-latest-${{ env.IQ_TREE_2_SHA }}
-#           path: src/piqtree2/_libiqtree/libiqtree2.a
-#           fail-on-cache-miss: true
+      - uses: actions/cache/restore@v4
+        with:
+          key: libiqtree-windows-latest-${{ env.IQ_TREE_2_SHA }}
+          path: src/piqtree2/_libiqtree/libiqtree2.a
+          fail-on-cache-miss: true
             
-#       - name: Ensure Correct Name
-#         shell: bash
-#         run: |
-#           ls src/piqtree2/_libiqtree
-#           mv src/piqtree2/_libiqtree/libiqtree2.a src/piqtree2/_libiqtree/iqtree2.lib
-#           ls src/piqtree2/_libiqtree
+      - name: Ensure Correct Name
+        shell: bash
+        run: |
+          ls src/piqtree2/_libiqtree
+          mv src/piqtree2/_libiqtree/libiqtree2.a src/piqtree2/_libiqtree/iqtree2.lib
+          ls src/piqtree2/_libiqtree
 
-#       - uses: actions/upload-artifact@v4
-#         with:
-#           name: Windows IQ-TREE Library 
-#           path: src/piqtree2/_libiqtree/iqtree2.lib
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Windows IQ-TREE Library 
+          path: src/piqtree2/_libiqtree/iqtree2.lib

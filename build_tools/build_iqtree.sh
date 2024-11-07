@@ -4,6 +4,12 @@ cd iqtree2
 rm -rf build
 mkdir build && cd build
 
+echo "hello"
+echo $ZLIB_LIBRARY
+echo $ZLIB_INCLUDE_DIR
+ls $ZLIB_LIBRARY
+ls $ZLIB_INCLUDE_DIR
+
 # Initialise cmake
 
 cmake_cmd="cmake -DIQTREE_FLAGS='single' -DBUILD_LIB=ON .."
