@@ -44,22 +44,24 @@ jobs:
           platform_version: 2022
           toolset: mingw
 
-      - name: Install vcpkg
-        if: matrix.os == 'windows-latest'
-        run: |
-          git clone https://github.com/microsoft/vcpkg.git
-          cd vcpkg
-          git checkout master
-          ./bootstrap-vcpkg.bat
+      # - name: Install vcpkg
+      #   if: matrix.os == 'windows-latest'
+      #   run: |
+      #     git clone https://github.com/microsoft/vcpkg.git
+      #     cd vcpkg
+      #     git checkout master
+      #     ./bootstrap-vcpkg.bat
       
-      - name: Install zlib with vcpkg
-        if: matrix.os == 'windows-latest'
-        run: |
-          vcpkg/vcpkg install zlib:x64-windows-static
+      # - name: Install zlib with vcpkg
+      #   if: matrix.os == 'windows-latest'
+      #   run: |
+      #     vcpkg/vcpkg install zlib:x64-windows-static
 
       - name: Build IQ-TREE
         shell: bash
         if: steps.cache.outputs.cache-hit != 'true'
+        # export VCPKG_ROOT=$(cygpath -w "$(pwd)/vcpkg")
+        # export ZLIB_ROOT=$VCPKG_ROOT\\installed\\x64-windows-static
         run: |
           if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
             sudo ./build_tools/before_all_linux.sh
@@ -67,8 +69,6 @@ jobs:
             ./build_tools/before_all_mac.sh
           elif [[ "${{ matrix.os }}" == "windows-latest" ]]; then
             export BOOST_ROOT="${{ steps.install-boost.outputs.BOOST_ROOT }}"
-            export VCPKG_ROOT=$(cygpath -w "$(pwd)/vcpkg")
-            export ZLIB_ROOT=$VCPKG_ROOT\\installed\\x64-windows-static
             
             ./build_tools/before_all_windows.sh
           fi
@@ -104,18 +104,18 @@ jobs:
           path: src/piqtree2/_libiqtree/libiqtree2.a
           fail-on-cache-miss: true
 
-      - name: Install vcpkg
-        if: matrix.os == 'windows-latest'
-        run: |
-          git clone https://github.com/microsoft/vcpkg.git
-          cd vcpkg
-          git checkout master
-          ./bootstrap-vcpkg.bat
+      # - name: Install vcpkg
+      #   if: matrix.os == 'windows-latest'
+      #   run: |
+      #     git clone https://github.com/microsoft/vcpkg.git
+      #     cd vcpkg
+      #     git checkout master
+      #     ./bootstrap-vcpkg.bat
       
-      - name: Install zlib with vcpkg
-        if: matrix.os == 'windows-latest'
-        run: |
-          vcpkg/vcpkg install zlib:x64-windows-static
+      # - name: Install zlib with vcpkg
+      #   if: matrix.os == 'windows-latest'
+      #   run: |
+      #     vcpkg/vcpkg install zlib:x64-windows-static
 
       - name: Run Nox Testing
         shell: bash

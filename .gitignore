@@ -11,6 +11,9 @@
 *.treefile
 
 # piqtree2 specific ignores
+vcpkg
+boost
+
 src/piqtree2/_libiqtree/**/*.a
 src/piqtree2/_libiqtree/**/*.lib
 

@@ -11,9 +11,8 @@ ext_modules = [
     Pybind11Extension(
         "_piqtree2",
         ["src/piqtree2/_libiqtree/_piqtree2.cpp"],
-        include_dirs=["vcpkg/installed/x64-windows-static/include"],
-        library_dirs=[LIBRARY_DIR, "vcpkg/installed/x64-windows-static/lib"],
-        libraries=["iqtree2", "zlib" if platform.system() == "Windows" else "z"],
+        library_dirs=[LIBRARY_DIR],#, "vcpkg/installed/x64-windows-static/lib"],
+        libraries=["iqtree2"]#, "zlib" if platform.system() == "Windows" else "z"],
     ),
 ]
 
