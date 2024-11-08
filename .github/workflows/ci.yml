@@ -120,6 +120,11 @@ jobs:
       # if [[ "$RUNNER_OS" == "Windows" ]]; then
       #   mv src/piqtree2/_libiqtree/libiqtree2.a src/piqtree2/_libiqtree/iqtree2.lib
       # fi
+      - name: Set up Visual Studio
+        uses: microsoft/setup-msbuild@v1
+        with:
+          vs-version: 'latest' 
+
       - name: Run Nox Testing
         shell: bash
         run: |

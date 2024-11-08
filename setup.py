@@ -25,8 +25,9 @@ class CustomBuildExt(distutils_build_ext):
 
                 # Create the .lib file using MSVC's 'lib' tool, naming it iqtree2.lib
                 print("Creating iqtree2.lib from .o files...")
-                os.system('lib /out:iqtree2.lib *.o')  # Use 'lib' to create the iqtree2.lib
+                os.system(f'lib /out:{LIBRARY_DIR}/iqtree2.lib *.o')  # Specify the full path to create iqtree2.lib in LIBRARY_DIR
 
+                print("Outfiles", os.listdir(LIBRARY_DIR))
                 # Clean up the extracted .o files
                 for obj in os.listdir('.'):
                     if obj.endswith('.o'):
