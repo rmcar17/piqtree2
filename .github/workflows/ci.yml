@@ -126,7 +126,7 @@ jobs:
           vs-version: 'latest' 
 
       - name: Run Nox Testing
-        shell: bash
+        shell: cmd
         run: |
           ls src/piqtree2/_libiqtree
           pip install nox
