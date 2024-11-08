@@ -9,9 +9,13 @@ LIBRARY_DIR = "src/piqtree2/_libiqtree"
 MINGW_LIB = os.path.join(LIBRARY_DIR, "libiqtree2.a")  # Path to your MinGW .a file
 
 class CustomBuildExt(distutils_build_ext):
+    def initialize_options(self):
+        # Ensure the build_ext options are initialized properly
+        super().initialize_options()
+
     def run(self):
+        # If on Windows, handle the conversion of .a to .lib
         if sys.platform == 'win32':
-            # If using MinGW on Windows, handle the .a to .lib conversion
             if os.path.exists(MINGW_LIB):
                 print(f"Found {MINGW_LIB}. Converting it to .lib...")
 
@@ -19,7 +23,7 @@ class CustomBuildExt(distutils_build_ext):
                 print(f"Extracting object files from {MINGW_LIB}...")
                 os.system(f'ar x {MINGW_LIB}')  # Extract the object files
 
-                # Now create the .lib file using MSVC's 'lib' tool
+                # Create the .lib file using MSVC's 'lib' tool
                 print("Creating libiqtree2.lib from .o files...")
                 os.system('lib /out:libiqtree2.lib *.o')  # Use 'lib' to create a .lib
 
@@ -29,8 +33,9 @@ class CustomBuildExt(distutils_build_ext):
                         os.remove(obj)
 
                 # Now the build process will use the libiqtree2.lib file
-                self.compiler.library_dirs.append(LIBRARY_DIR)
-                self.compiler.libraries.append('iqtree2')
+                # Ensure the library_dirs and libraries are updated correctly
+                self.library_dirs.append(LIBRARY_DIR)
+                self.libraries.append('iqtree2')
 
         # Continue with the standard build process
         super().run()
