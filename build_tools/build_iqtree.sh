@@ -15,7 +15,7 @@ mkdir build && cd build
 cmake_cmd="cmake -DIQTREE_FLAGS='single' -DBUILD_LIB=ON .."
 
 if [[ "$RUNNER_OS" == "Windows" ]]; then
-  cmake_cmd="cmake \
+  cmake_cmd="cmake -G 'MinGW Makefiles' \
     -DBoost_INCLUDE_DIR='$BOOST_ROOT/include' \
     -DBoost_LIBRARY_DIRS='$BOOST_ROOT/lib' \
     -DIQTREE_FLAGS='single' -DBUILD_LIB=ON .."
@@ -28,11 +28,11 @@ eval $cmake_cmd
 
 # Build IQ
 
-if [[ "$RUNNER_OS" == "Windows" ]]; then
-  cmake --build . --config Release   
-else
-  make -j
-fi
+# if [[ "$RUNNER_OS" == "Windows" ]]; then
+#   cmake --build . --config Release   
+# else
+make -j
+# fi
 
 ls
 
