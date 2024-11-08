@@ -1,6 +1,7 @@
 import platform
 import os
 import sys
+import subprocess
 from setuptools import setup
 from pybind11.setup_helpers import Pybind11Extension, build_ext
 from distutils.command.build_ext import build_ext as distutils_build_ext
@@ -33,7 +34,7 @@ def extract_all_a_files(library_path):
             os.system(f'ar x {current_file}')
 
             # Add all .obj files in the current directory to the list
-            extracted_obj_files.extend([f for f in os.listdir('.') if f.endswith('.obj') or f.endswith(".o")])
+            extracted_obj_files.extend([f for f in os.listdir('.') if f.endswith('.obj')])
 
             # Now check if any newly extracted files are .a files (nested archives)
             nested_a_files = [f for f in os.listdir('.') if f.endswith('.a') and f not in extracted_files]
@@ -44,8 +45,6 @@ def extract_all_a_files(library_path):
 
     # Return the list of all extracted .obj files
     return extracted_obj_files
-
-
 
 class CustomBuildExt(distutils_build_ext):
     def initialize_options(self):
@@ -68,19 +67,30 @@ class CustomBuildExt(distutils_build_ext):
 
                 # Create the .lib file using MSVC's 'lib' tool, naming it iqtree2.lib
                 print("Creating iqtree2.lib from .obj files...")
-                os.system(f'lib /out:{LIBRARY_DIR}/iqtree2.lib {" ".join(extracted_obj_files)}')
 
-                # Debug output for checking extracted files
-                print("Outfiles:", os.listdir(LIBRARY_DIR))
-                print("Outfiles 1:", os.listdir(LIBRARY_DIR + "/.."))
-                print("Outfiles 2:", os.listdir(LIBRARY_DIR + "/../.."))
-                print("Outfiles 3:", os.listdir(LIBRARY_DIR + "/../../.."))
+                # Build the command to run
+                lib_command = ['lib', '/out:', os.path.join(LIBRARY_DIR, 'iqtree2.lib')] + extracted_obj_files
+
+                # Run the lib tool with subprocess for better error handling
+                try:
+                    subprocess.run(lib_command, check=True, shell=True)
+                    print(f"Successfully created {LIBRARY_DIR}/iqtree2.lib")
+                except subprocess.CalledProcessError as e:
+                    print(f"Error running lib command: {e}")
+                    sys.exit(1)
+
 
                 # Clean up the extracted .obj files
                 for obj in extracted_obj_files:
                     if os.path.exists(obj):
                         os.remove(obj)
 
+                # Debug output for checking extracted files
+                print("Outfiles:", os.listdir(LIBRARY_DIR))
+                print("Outfiles 1:", os.listdir(LIBRARY_DIR + "/.."))
+                print("Outfiles 2:", os.listdir(LIBRARY_DIR + "/../.."))
+                print("Outfiles 3:", os.listdir(LIBRARY_DIR + "/../../.."))
+                
                 # Now the build process will use the iqtree2.lib file
                 # Ensure the library_dirs and libraries are updated correctly
                 self.library_dirs.append(LIBRARY_DIR)
