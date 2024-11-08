@@ -117,12 +117,12 @@ jobs:
       #   run: |
       #     vcpkg/vcpkg install zlib:x64-windows-static
 
+      # if [[ "$RUNNER_OS" == "Windows" ]]; then
+      #   mv src/piqtree2/_libiqtree/libiqtree2.a src/piqtree2/_libiqtree/iqtree2.lib
+      # fi
       - name: Run Nox Testing
         shell: bash
         run: |
-          if [[ "$RUNNER_OS" == "Windows" ]]; then
-            mv src/piqtree2/_libiqtree/libiqtree2.a src/piqtree2/_libiqtree/iqtree2.lib
-          fi
           pip install nox
           nox -s test-${{ matrix.python-version }} -- --cov --cov-report=lcov:${{matrix.os}}-${{matrix.python-version}}.lcov --cov-report=term --cov-append --durations=20  
   
