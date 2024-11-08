@@ -123,25 +123,25 @@ jobs:
       - name: Set up Visual Studio
         uses: microsoft/setup-msbuild@v1
         with:
-          vs-version: 'latest' 
-
+          vs-version: 'latest'
+    
       - name: Run Nox Testing
         shell: bash
         run: |
-          # Initialize MSVC environment
+          # Initialize MSVC environment by running vcvarsall.bat using cmd
           echo "Setting up MSVC environment..."
-          source "C:/Program Files (x86)/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvarsall.bat" amd64
-
-          # Verify the environment setup
+          cmd //C "C:/Program Files (x86)/Microsoft Visual Studio/2022/Community/VC/Auxiliary/Build/vcvarsall.bat" x64
+      
+          # Verify the environment setup by checking if MSVC tools are available
           echo "MSVC tools available:"
           where cl
           where lib
-
+      
           # Proceed with Nox testing
           ls src/piqtree2/_libiqtree
           pip install nox
-          nox -s test-${{ matrix.python-version }} -- --cov --cov-report=lcov:${{matrix.os}}-${{matrix.python-version}}.lcov --cov-report=term --cov-append --durations=20  
-  
+          nox -s test-${{ matrix.python-version }} -- --cov --cov-report=lcov:${{matrix.os}}-${{matrix.python-version}}.lcov --cov-report=term --cov-append --durations=20
+    
       - name: Coveralls Parallel
         if: matrix.os != 'macos-13'
         uses: coverallsapp/github-action@v2
