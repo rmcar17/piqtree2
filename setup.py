@@ -12,7 +12,7 @@ ext_modules = [
         "_piqtree2",
         ["src/piqtree2/_libiqtree/_piqtree2.cpp"],
         library_dirs=[LIBRARY_DIR],#, "vcpkg/installed/x64-windows-static/lib"],
-        libraries=["iqtree2"]#, "zlib" if platform.system() == "Windows" else "z"],
+        libraries=["iqtree2"] + [] if platform.system() == "Windows" else ["z"],
     ),
 ]
 
