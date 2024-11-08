@@ -13,14 +13,15 @@ class CustomBuildExt(distutils_build_ext):
         if sys.platform == 'win32':
             # If using MinGW on Windows, handle the .a to .lib conversion
             if os.path.exists(MINGW_LIB):
-                # Extract object files from the .a file
-                if not os.path.exists("libiqtree2.o"):
-                    print(f"Extracting object files from {MINGW_LIB}...")
-                    os.system(f'ar x {MINGW_LIB}')  # Use 'ar' from MinGW to extract .o files
-                
-                # Convert the extracted .o files into a .lib file using MSVC's 'lib' tool
+                print(f"Found {MINGW_LIB}. Converting it to .lib...")
+
+                # Extract object files from the .a file using 'ar' from MinGW
+                print(f"Extracting object files from {MINGW_LIB}...")
+                os.system(f'ar x {MINGW_LIB}')  # Extract the object files
+
+                # Now create the .lib file using MSVC's 'lib' tool
                 print("Creating libiqtree2.lib from .o files...")
-                os.system('lib /out:libiqtree2.lib *.o')
+                os.system('lib /out:libiqtree2.lib *.o')  # Use 'lib' to create a .lib
 
                 # Clean up the extracted .o files
                 for obj in os.listdir('.'):
