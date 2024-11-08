@@ -28,7 +28,13 @@ eval $cmake_cmd
 
 # Build IQ
 
-make -j
+if [[ "$RUNNER_OS" == "Windows" ]]; then
+  cmake --build . --config Release   
+else
+  make -j
+fi
+
+ls
 
 # Move to piqtree2 directory
 
