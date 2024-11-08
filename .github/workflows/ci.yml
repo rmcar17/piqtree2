@@ -124,13 +124,13 @@ jobs:
         uses: microsoft/setup-msbuild@v1
         with:
           vs-version: 'latest'
-    
+      
       - name: Run Nox Testing
         shell: bash
         run: |
-          # Initialize MSVC environment by running vcvarsall.bat using cmd
+          # Initialize MSVC environment by running vcvarsall.bat using cmd, correctly handling spaces in the path
           echo "Setting up MSVC environment..."
-          cmd //C "C:/Program Files (x86)/Microsoft Visual Studio/2022/Community/VC/Auxiliary/Build/vcvarsall.bat" x64
+          cmd //C "\"C:/Program Files (x86)/Microsoft Visual Studio/2022/Community/VC/Auxiliary/Build/vcvarsall.bat\" x64"
       
           # Verify the environment setup by checking if MSVC tools are available
           echo "MSVC tools available:"
