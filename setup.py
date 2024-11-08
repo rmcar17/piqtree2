@@ -24,6 +24,9 @@ def extract_all_a_files(library_path):
         if current_file.endswith(".a") and current_file not in extracted_files:
             print(f"Extracting {current_file}...")
 
+            # Add this .a file to the extracted_files set so it won't be processed again
+            extracted_files.add(current_file)
+
             # Extract the .o files using 'ar x'
             os.system(f'ar x {current_file}')
 
@@ -38,6 +41,7 @@ def extract_all_a_files(library_path):
             print(f"Found nested .a files: {nested_a_files}")
 
     return extracted_files
+
 
 class CustomBuildExt(distutils_build_ext):
     def initialize_options(self):
