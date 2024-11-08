@@ -23,16 +23,16 @@ class CustomBuildExt(distutils_build_ext):
                 print(f"Extracting object files from {MINGW_LIB}...")
                 os.system(f'ar x {MINGW_LIB}')  # Extract the object files
 
-                # Create the .lib file using MSVC's 'lib' tool
-                print("Creating libiqtree2.lib from .o files...")
-                os.system('lib /out:libiqtree2.lib *.o')  # Use 'lib' to create a .lib
+                # Create the .lib file using MSVC's 'lib' tool, naming it iqtree2.lib
+                print("Creating iqtree2.lib from .o files...")
+                os.system('lib /out:iqtree2.lib *.o')  # Use 'lib' to create the iqtree2.lib
 
                 # Clean up the extracted .o files
                 for obj in os.listdir('.'):
                     if obj.endswith('.o'):
                         os.remove(obj)
 
-                # Now the build process will use the libiqtree2.lib file
+                # Now the build process will use the iqtree2.lib file
                 # Ensure the library_dirs and libraries are updated correctly
                 self.library_dirs.append(LIBRARY_DIR)
                 self.libraries.append('iqtree2')
