@@ -120,43 +120,12 @@ jobs:
       # if [[ "$RUNNER_OS" == "Windows" ]]; then
       #   mv src/piqtree2/_libiqtree/libiqtree2.a src/piqtree2/_libiqtree/iqtree2.lib
       # fi
-      - name: Set up Visual Studio
-        uses: microsoft/setup-msbuild@v1
-        with:
-          vs-version: 'latest'
-          
-      - name: Verify VC Auxiliary Build Directory
-        shell: cmd
-        run: |
-          echo "Listing VC Auxiliary Build directory..."
-          dir "C:/Program Files (x86)/Microsoft Visual Studio/2022/Community/VC/Auxiliary/Build"
+      - uses: ilammy/msvc-dev-cmd@v1
 
-      - name: Set up MSVC environment
-        shell: cmd
+      - name: Run Nox Testing
         run: |
-          echo Setting up MSVC environment...
-          
-          REM Set up MSVC environment using vcvarsall.bat
-          CALL "C:/Program Files (x86)/Microsoft Visual Studio/2022/Community/VC/Auxiliary/Build/vcvarsall.bat" x64
-          
-          REM Check if MSVC tools are available
-          echo Checking for MSVC tools...
-          where cl
           where lib
-      - name: Run Nox Testing (Windows CMD)
-        shell: cmd
-        run: |
-          echo Setting up MSVC environment...
-      
-          REM Set up MSVC environment using vcvarsall.bat
-          CALL "C:/Program Files (x86)/Microsoft Visual Studio/2022/Community/VC/Auxiliary/Build/vcvarsall.bat" x64
-      
-          REM Check if MSVC tools are available
-          echo Checking for MSVC tools...
-          where cl
-          where lib
-      
-          REM Run the Nox testing step
+
           pip install nox
           nox -s test-${{ matrix.python-version }} -- --cov --cov-report=lcov:${{matrix.os}}-${{matrix.python-version}}.lcov --cov-report=term --cov-append --durations=20
         
