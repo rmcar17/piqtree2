@@ -28,9 +28,9 @@ class CustomBuildExt(distutils_build_ext):
                 os.system(f'lib /out:{LIBRARY_DIR}/iqtree2.lib *.o')  # Specify the full path to create iqtree2.lib in LIBRARY_DIR
 
                 print("Outfiles", os.listdir(LIBRARY_DIR))
-                print("Outfiles 1", os.listdir(LIBRARY_DIR) / "..")
-                print("Outfiles 2", os.listdir(LIBRARY_DIR) / "../..")
-                print("Outfiles 3", os.listdir(LIBRARY_DIR) / "../../..")
+                print("Outfiles 1", os.listdir(LIBRARY_DIR/ "..") )
+                print("Outfiles 2", os.listdir(LIBRARY_DIR/ "../..") )
+                print("Outfiles 3", os.listdir(LIBRARY_DIR/ "../../..") )
                 # Clean up the extracted .o files
                 for obj in os.listdir('.'):
                     if obj.endswith('.o'):
