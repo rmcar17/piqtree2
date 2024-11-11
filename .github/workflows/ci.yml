@@ -120,6 +120,8 @@ jobs:
       # if [[ "$RUNNER_OS" == "Windows" ]]; then
       #   mv src/piqtree2/_libiqtree/libiqtree2.a src/piqtree2/_libiqtree/iqtree2.lib
       # fi
+      - uses: ilammy/msvc-dev-cmd@v1
+      
       - name: Extract archive
         run: |
           cd src/piqtree2/_libiqtree
@@ -131,7 +133,6 @@ jobs:
           name: Library files
           path: src/piqtree2/_libiqtree
           
-      - uses: ilammy/msvc-dev-cmd@v1
 
       - name: Run Nox Testing
         run: |
