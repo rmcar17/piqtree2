@@ -120,6 +120,11 @@ jobs:
       # if [[ "$RUNNER_OS" == "Windows" ]]; then
       #   mv src/piqtree2/_libiqtree/libiqtree2.a src/piqtree2/_libiqtree/iqtree2.lib
       # fi
+      - name: Extract archive
+        run: |
+          cd src/piqtree2/_libiqtree
+          python extract.py
+
       - uses: actions/upload-artifact@v4
         if: matrix.os == 'windows-latest'
         with:
