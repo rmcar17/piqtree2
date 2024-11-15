@@ -1,26 +1,29 @@
 diff --git a/main/CMakeLists.txt b/main/CMakeLists.txt
-index 7edfc1f19..10ac79c20 100644
+index 7edfc1f19..f5ee720c4 100644
 --- a/main/CMakeLists.txt
 +++ b/main/CMakeLists.txt
-@@ -14,7 +14,8 @@ if (BUILD_LIB)
+@@ -14,8 +14,10 @@ if (BUILD_LIB)
      terraceanalysis.h
      suppFunc.cpp
      suppFunc.h
 -    libiqtree2_fun.cpp
+-    libiqtree2_fun.h
 +    libiqtree2_fun_connector.cpp
 +    libiqtree2_fun_helper.cpp
-     libiqtree2_fun.h
++    libiqtree2_fun_connector.h
++    libiqtree2_fun_helper.h
      )
  else()
+     add_library(main
 diff --git a/main/libiqtree2_fun_connector.cpp b/main/libiqtree2_fun_connector.cpp
 new file mode 100644
-index 000000000..374f80b30
+index 000000000..c909338ab
 --- /dev/null
 +++ b/main/libiqtree2_fun_connector.cpp
 @@ -0,0 +1,24 @@
 +#include <string>
 +#include <vector>
-+#include "libiqtree2_fun_helper.h"
++#include "libiqtree2_fun_connector.h"
 +
 +using namespace std;
 +
@@ -75,7 +78,7 @@ diff --git a/main/libiqtree2_fun.cpp b/main/libiqtree2_fun_helper.cpp
 similarity index 93%
 rename from main/libiqtree2_fun.cpp
 rename to main/libiqtree2_fun_helper.cpp
-index 456780803..75c9978e6 100644
+index 456780803..bd60b8d07 100644
 --- a/main/libiqtree2_fun.cpp
 +++ b/main/libiqtree2_fun_helper.cpp
 @@ -1,581 +1,581 @@
@@ -660,7 +663,7 @@ index 456780803..75c9978e6 100644
 -        }
 -    }
 -}
-+#include "libiqtree2_fun.h"
++#include "libiqtree2_fun_helper.h"
 +
 +#if defined WIN32 || defined _WIN32 || defined __WIN32__ || defined WIN64
 +#include <winsock2.h>
