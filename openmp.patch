@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 4b33b85e9..adfa7a823 100644
+index 4b33b85e9..92c01e487 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -455,30 +455,6 @@ if (NOT IQTREE_FLAGS MATCHES "single")
@@ -41,36 +41,55 @@ index 4b33b85e9..adfa7a823 100644
  
              #Also need to ensure libomp.dll is in the path (or copied into the output directory).
              #(You want the one in ${LLVM_DIR}\\bin
-@@ -819,6 +794,28 @@ if (USE_CMAPLE STREQUAL "ON")
+@@ -819,6 +794,47 @@ if (USE_CMAPLE STREQUAL "ON")
  	)
  endif()
  
 +if (NOT IQTREE_FLAGS MATCHES "single")
 +    find_package(OpenMP)
++
 +    if (OPENMP_FOUND)
 +        # Add OpenMP flags to compiler options
 +        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
 +        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 +        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
 +
-+        # Ensure the OpenMP runtime (libgomp) is linked with the static library
-+        target_link_libraries(iqtree2 OpenMP::OpenMP_CXX gomp)  # Link OpenMP runtime (libgomp)
++        # Ensure the OpenMP runtime (libgomp or libomp) is linked with the static library
++        target_link_libraries(iqtree2 OpenMP::OpenMP_CXX omp)  # Link OpenMP runtime (libomp)
 +
-+        # If USE_CMAPLE is enabled, also link OpenMP runtime for iqtree2-aa
 +        if (USE_CMAPLE STREQUAL "ON")
-+            target_link_libraries(iqtree2-aa OpenMP::OpenMP_CXX gomp)  # Link OpenMP runtime (libgomp)
++            target_link_libraries(iqtree2-aa OpenMP::OpenMP_CXX omp)  # Link OpenMP runtime (libomp)
 +        endif()
 +
-+        message("Set OpenMP flags and linked OpenMP runtime (libgomp)")
++        message("Set OpenMP flags and linked OpenMP runtime (libomp)")
 +    else()
 +        message(WARNING "OpenMP not found, skipping OpenMP setup.")
 +    endif()
++
++    # For macOS, ensure that we're using the Homebrew GCC and linking to libomp
++    if (APPLE)
++        set(CMAKE_C_COMPILER "/usr/local/bin/gcc-12")  # Use Homebrew GCC
++        set(CMAKE_CXX_COMPILER "/usr/local/bin/g++-12")
++        
++        set(OpenMP_C_FLAGS "-fopenmp")
++        set(OpenMP_CXX_FLAGS "-fopenmp")
++        set(OpenMP_EXE_LINKER_FLAGS "-fopenmp")
++        
++        # Link libomp explicitly
++        find_library(OPENMP_LIBOMP NAMES omp libomp PATHS /usr/local/lib /opt/homebrew/lib)
++        if (OPENMP_LIBOMP)
++            message(STATUS "Found OpenMP: ${OPENMP_LIBOMP}")
++        else()
++            message(WARNING "OpenMP not found, OpenMP_LIBOMP is missing.")
++        endif()
++    endif()
 +endif()
++
 +
  if(Backtrace_FOUND)
    include_directories(${Backtrace_INCLUDE_DIR})
    target_link_libraries(iqtree2 ${Backtrace_LIBRARY})
-@@ -878,35 +875,9 @@ endif()
+@@ -878,35 +894,9 @@ endif()
  
  set(THREAD_LIB "")
  if (NOT IQTREE_FLAGS MATCHES "single")
@@ -106,7 +125,7 @@ index 4b33b85e9..adfa7a823 100644
  endif()
  
  # basic linking librararies
-@@ -1065,26 +1036,6 @@ if (WIN32)
+@@ -1065,26 +1055,6 @@ if (WIN32)
      if (USE_CMAPLE STREQUAL "ON")
      	install (FILES "${BINARY_DIR}/iqtree2-aa${EXE_SUFFIX}-click.exe" DESTINATION bin)
      endif()
