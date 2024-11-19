@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 4b33b85e9..12556f918 100644
+index 4b33b85e9..21fcbf410 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -60,7 +60,7 @@
@@ -55,24 +55,24 @@ index 4b33b85e9..12556f918 100644
  endif()
  
 +if (NOT IQTREE_FLAGS MATCHES "single")
-+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
-+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fopenmp")
-+    if(CMAKE_C_COMPILER_ID MATCHES "Clang")
-+        set(OpenMP_C "${CMAKE_C_COMPILER}")
-+        set(OpenMP_C_FLAGS "-fopenmp=libomp -Wno-unused-command-line-argument")
-+        set(OpenMP_C_LIB_NAMES "libomp" "libgomp" "libiomp5")
-+        set(OpenMP_libomp_LIBRARY ${OpenMP_C_LIB_NAMES})
-+        set(OpenMP_libgomp_LIBRARY ${OpenMP_C_LIB_NAMES})
-+        set(OpenMP_libiomp5_LIBRARY ${OpenMP_C_LIB_NAMES})
-+    endif()
-+    if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-+      set(OpenMP_CXX "${CMAKE_CXX_COMPILER}")
-+      set(OpenMP_CXX_FLAGS "-fopenmp=libomp -Wno-unused-command-line-argument")
-+      set(OpenMP_CXX_LIB_NAMES "libomp" "libgomp" "libiomp5")
-+      set(OpenMP_libomp_LIBRARY ${OpenMP_CXX_LIB_NAMES})
-+      set(OpenMP_libgomp_LIBRARY ${OpenMP_CXX_LIB_NAMES})
-+      set(OpenMP_libiomp5_LIBRARY ${OpenMP_CXX_LIB_NAMES})
-+    endif()
++    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
++    # set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fopenmp")
++    # if(CMAKE_C_COMPILER_ID MATCHES "Clang")
++    #     set(OpenMP_C "${CMAKE_C_COMPILER}")
++    #     set(OpenMP_C_FLAGS "-fopenmp=libomp -Wno-unused-command-line-argument")
++    #     set(OpenMP_C_LIB_NAMES "libomp" "libgomp" "libiomp5")
++    #     set(OpenMP_libomp_LIBRARY ${OpenMP_C_LIB_NAMES})
++    #     set(OpenMP_libgomp_LIBRARY ${OpenMP_C_LIB_NAMES})
++    #     set(OpenMP_libiomp5_LIBRARY ${OpenMP_C_LIB_NAMES})
++    # endif()
++    # if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
++    #   set(OpenMP_CXX "${CMAKE_CXX_COMPILER}")
++    #   set(OpenMP_CXX_FLAGS "-fopenmp=libomp -Wno-unused-command-line-argument")
++    #   set(OpenMP_CXX_LIB_NAMES "libomp" "libgomp" "libiomp5")
++    #   set(OpenMP_libomp_LIBRARY ${OpenMP_CXX_LIB_NAMES})
++    #   set(OpenMP_libgomp_LIBRARY ${OpenMP_CXX_LIB_NAMES})
++    #   set(OpenMP_libiomp5_LIBRARY ${OpenMP_CXX_LIB_NAMES})
++    # endif()
 +
 +    find_package(OpenMP)
 +
