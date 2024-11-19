@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 4b33b85e9..b6e00858b 100644
+index 4b33b85e9..3af499f16 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -60,7 +60,7 @@
@@ -50,11 +50,14 @@ index 4b33b85e9..b6e00858b 100644
  
              #Also need to ensure libomp.dll is in the path (or copied into the output directory).
              #(You want the one in ${LLVM_DIR}\\bin
-@@ -819,6 +794,47 @@ if (USE_CMAPLE STREQUAL "ON")
+@@ -819,6 +794,50 @@ if (USE_CMAPLE STREQUAL "ON")
  	)
  endif()
  
 +if (NOT IQTREE_FLAGS MATCHES "single")
++    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
++    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fopenmp")
++
 +    find_package(OpenMP)
 +
 +    if (OPENMP_FOUND)
@@ -98,7 +101,7 @@ index 4b33b85e9..b6e00858b 100644
  if(Backtrace_FOUND)
    include_directories(${Backtrace_INCLUDE_DIR})
    target_link_libraries(iqtree2 ${Backtrace_LIBRARY})
-@@ -878,35 +894,9 @@ endif()
+@@ -878,35 +897,9 @@ endif()
  
  set(THREAD_LIB "")
  if (NOT IQTREE_FLAGS MATCHES "single")
@@ -134,7 +137,7 @@ index 4b33b85e9..b6e00858b 100644
  endif()
  
  # basic linking librararies
-@@ -1065,26 +1055,6 @@ if (WIN32)
+@@ -1065,26 +1058,6 @@ if (WIN32)
      if (USE_CMAPLE STREQUAL "ON")
      	install (FILES "${BINARY_DIR}/iqtree2-aa${EXE_SUFFIX}-click.exe" DESTINATION bin)
      endif()
