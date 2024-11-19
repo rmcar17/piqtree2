@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 4b33b85e9..f06c4f25e 100644
+index 4b33b85e9..9f598b7dd 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -60,7 +60,7 @@
@@ -61,7 +61,7 @@ index 4b33b85e9..f06c4f25e 100644
 +
 +    # Manually specify the OpenMP library location (if needed)
 +    set(OpenMP_LIBRARIES "/opt/homebrew/lib/libomp.dylib")
-+    set(OpenMP_INCLUDE_DIRS "/opt/homebrew/include")
++    set(OpenMP_INCLUDE_DIRS "/opt/homebrew/opt/libomp/include")
 +
 +    # Link OpenMP library explicitly
 +    target_link_libraries(iqtree2 ${OpenMP_LIBRARIES})

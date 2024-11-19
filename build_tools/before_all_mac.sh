@@ -4,8 +4,9 @@ brew install eigen boost gcc libomp cmake
 echo "Here"
 echo $LDFLAGS
 echo $CPPFLAGS
-ls /opt/homebrew/lib/libomp*
 ls /opt/homebrew/opt/libomp/lib
+echo "That was lib"
+ls /opt/homebrew/opt/libomp/include/
 echo "There"
 
 export LDFLAGS="-L/opt/homebrew/opt/libomp/lib"
