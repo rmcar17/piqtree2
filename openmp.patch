@@ -1,7 +1,16 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 4b33b85e9..92c01e487 100644
+index 4b33b85e9..b6e00858b 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
+@@ -60,7 +60,7 @@
+ #
+ #
+ 
+-cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.9)
+ set(CMAKE_LEGACY_CYGWIN_WIN32 0)
+ 
+ set(GCC_MIN_VERSION "4.8")
 @@ -455,30 +455,6 @@ if (NOT IQTREE_FLAGS MATCHES "single")
          endif()
      endif()
@@ -66,23 +75,23 @@ index 4b33b85e9..92c01e487 100644
 +        message(WARNING "OpenMP not found, skipping OpenMP setup.")
 +    endif()
 +
-+    # For macOS, ensure that we're using the Homebrew GCC and linking to libomp
-+    if (APPLE)
-+        set(CMAKE_C_COMPILER "/usr/local/bin/gcc-12")  # Use Homebrew GCC
-+        set(CMAKE_CXX_COMPILER "/usr/local/bin/g++-12")
++    # # For macOS, ensure that we're using the Homebrew GCC and linking to libomp
++    # if (APPLE)
++    #     set(CMAKE_C_COMPILER "/usr/local/bin/gcc-12")  # Use Homebrew GCC
++    #     set(CMAKE_CXX_COMPILER "/usr/local/bin/g++-12")
 +        
-+        set(OpenMP_C_FLAGS "-fopenmp")
-+        set(OpenMP_CXX_FLAGS "-fopenmp")
-+        set(OpenMP_EXE_LINKER_FLAGS "-fopenmp")
++    #     set(OpenMP_C_FLAGS "-fopenmp")
++    #     set(OpenMP_CXX_FLAGS "-fopenmp")
++    #     set(OpenMP_EXE_LINKER_FLAGS "-fopenmp")
 +        
-+        # Link libomp explicitly
-+        find_library(OPENMP_LIBOMP NAMES omp libomp PATHS /usr/local/lib /opt/homebrew/lib)
-+        if (OPENMP_LIBOMP)
-+            message(STATUS "Found OpenMP: ${OPENMP_LIBOMP}")
-+        else()
-+            message(WARNING "OpenMP not found, OpenMP_LIBOMP is missing.")
-+        endif()
-+    endif()
++    #     # Link libomp explicitly
++    #     find_library(OPENMP_LIBOMP NAMES omp libomp PATHS /usr/local/lib /opt/homebrew/lib)
++    #     if (OPENMP_LIBOMP)
++    #         message(STATUS "Found OpenMP: ${OPENMP_LIBOMP}")
++    #     else()
++    #         message(WARNING "OpenMP not found, OpenMP_LIBOMP is missing.")
++    #     endif()
++    # endif()
 +endif()
 +
 +
