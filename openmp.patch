@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 4b33b85e9..3acf0d81a 100644
+index 4b33b85e9..e2d16aeb5 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -60,7 +60,7 @@
@@ -11,6 +11,15 @@ index 4b33b85e9..3acf0d81a 100644
  set(CMAKE_LEGACY_CYGWIN_WIN32 0)
  
  set(GCC_MIN_VERSION "4.8")
+@@ -220,7 +220,7 @@ if (WIN32)
+ elseif (APPLE)
+     message("Target OS     : Mac OS X")
+ 	if(OSX_NATIVE_ARCHITECTURE STREQUAL "arm64")
+-		add_definitions("--target=arm64-apple-macos10.5")
++		# add_definitions("--target=arm64-apple-macos10.5")
+         set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --target=arm64-apple-macos12.0.1")
+ 	else()
+ 		# to be compatible back to Mac OS X 10.7
 @@ -455,30 +455,6 @@ if (NOT IQTREE_FLAGS MATCHES "single")
          endif()
      endif()
