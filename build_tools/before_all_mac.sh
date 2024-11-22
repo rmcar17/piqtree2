@@ -1,13 +1,12 @@
 brew update
-brew install eigen boost gcc libomp cmake
+brew install eigen boost llvm gcc libomp cmake
 
-GCC_BIN=$(brew --prefix gcc)/bin/gcc-14
-GPP_BIN=$(brew --prefix gcc)/bin/g++-14
+LLVM_BIN=$(brew --prefix llvm)/bin
 OMP_LIB=$(brew --prefix libomp)/lib
 OMP_INCLUDE=$(brew --prefix libomp)/include
 
-export CC=$GCC_BIN
-export CXX=$GPP_BIN
+export CC=$LLVM_BIN/clang
+export CXX=$LLVM_BIN/clang++
 export LDFLAGS="-L$OMP_LIB"
 export CPPFLAGS="-I$OMP_INCLUDE"
 export OpenMP_C_FLAGS="-fopenmp -L$OMP_LIB -I$OMP_INCLUDE"
