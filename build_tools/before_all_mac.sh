@@ -1,5 +1,5 @@
 brew update
-brew install eigen boost llvm gcc libomp cmake
+brew install make eigen boost libomp
 
 LLVM_BIN=$(brew --prefix llvm)/bin
 OMP_LIB=$(brew --prefix libomp)/lib
@@ -7,14 +7,10 @@ OMP_INCLUDE=$(brew --prefix libomp)/include
 LLVM_LIB=$(brew --prefix llvm)/lib
 LLVM_INCLUDE=$(brew --prefix libomp)/include
 
-export CC=$LLVM_BIN/clang
-export CXX=$LLVM_BIN/clang++
-export LDFLAGS="-L$OMP_LIB -L$LLVM_LIB"
-export CPPFLAGS="-I$OMP_INCLUDE -I$LLVM_INCLUDE"
-export OpenMP_C_FLAGS="-fopenmp -L$OMP_LIB -I$OMP_INCLUDE"
-export OpenMP_CXX_FLAGS="-fopenmp -L$OMP_LIB -I$OMP_INCLUDE"
-export OpenMP_C_LIB_NAMES="libomp"
-export OpenMP_CXX_LIB_NAMES="libomp"
-export OpenMP_libomp_LIBRARY="$OMP_LIB"
+OMP_ROOT=$(brew --prefix libomp)
+
+export LDFLAGS="-L$OMP_ROOT/lib"
+export CPPFLAGS="-I$OMP_ROOT/include"
+export CXXFLAGS="-I$OMP_ROOT/include"
 
 bash build_tools/build_iqtree.sh

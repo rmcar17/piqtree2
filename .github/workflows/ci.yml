@@ -37,9 +37,6 @@ jobs:
       - name: Build IQ-TREE
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          cd iqtree2
-          git apply ../openmp.patch
-          cd ..
           if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
             sudo ./build_tools/before_all_linux.sh
           else
