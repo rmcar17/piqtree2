@@ -1,5 +1,7 @@
 """setup for piqtree2."""
 
+import platform
+
 from pybind11.setup_helpers import Pybind11Extension, build_ext
 from setuptools import setup
 
@@ -10,7 +12,7 @@ ext_modules = [
         "_piqtree2",
         ["src/piqtree2/_libiqtree/_piqtree2.cpp"],
         library_dirs=[LIBRARY_DIR],
-        libraries=["iqtree2", "z"],
+        libraries=["iqtree2", "z"] + ([] if platform.system() != "Linux" else ["gomp"]),
     ),
 ]
 
