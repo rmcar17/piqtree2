@@ -1,15 +1,14 @@
 brew update
 brew install eigen boost gcc libomp cmake
 
-echo "Here"
-echo $LDFLAGS
-echo $CPPFLAGS
-ls /opt/homebrew/opt/libomp/lib
-echo "That was lib"
-ls /opt/homebrew/opt/libomp/include/
-echo "There"
+GCC_BIN=$(brew --prefix gcc)/bin/gcc-14
+GPP_BIN=$(brew --prefix gcc)/bin/g++-14
+OMP_LIB=$(brew --prefix libomp)/lib
+OMP_INCLUDE=$(brew --prefix libomp)/include
 
-export LDFLAGS="-L/opt/homebrew/opt/libomp/lib"
-export CPPFLAGS="-I/opt/homebrew/opt/libomp/include"
+export CC=$GCC_BIN
+export CXX=$GPP_BIN
+export LDFLAGS="-L$OMP_LIB"
+export CPPFLAGS="-I$OMP_INCLUDE"
 
 bash build_tools/build_iqtree.sh
