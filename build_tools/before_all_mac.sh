@@ -13,5 +13,6 @@ export CPPFLAGS="-I$OMP_INCLUDE"
 export OpenMP_C_FLAGS="-fopenmp -L$OMP_LIB -I$OMP_INCLUDE"
 export OPENMP_CXX_FLAGS="-fopenmp -L$OMP_LIB -I$OMP_INCLUDE"
 export OpenMP_C_LIB_NAMES="libomp"
+export OpenMP_libomp_LIBRARY="$OMP_LIB"
 
 bash build_tools/build_iqtree.sh
