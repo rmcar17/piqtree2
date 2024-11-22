@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 4b33b85e9..e2d16aeb5 100644
+index 4b33b85e9..bbe91238c 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -60,7 +60,7 @@
@@ -11,7 +11,18 @@ index 4b33b85e9..e2d16aeb5 100644
  set(CMAKE_LEGACY_CYGWIN_WIN32 0)
  
  set(GCC_MIN_VERSION "4.8")
-@@ -220,7 +220,7 @@ if (WIN32)
+@@ -125,7 +125,9 @@ endif()
+ 
+ include_directories("${PROJECT_SOURCE_DIR}")
+ include_directories("${PROJECT_SOURCE_DIR}/yaml-cpp/include")
+-include_directories(after system "/usr/local/include")
++#include_directories(after system "/usr/local/include")
++include_directories(BEFORE "/usr/local/opt/llvm/include") 
++link_directories("/usr/local/opt/llvm/lib")
+ 
+ ##################################################################
+ # Include the Terraphast library
+@@ -220,7 +222,7 @@ if (WIN32)
  elseif (APPLE)
      message("Target OS     : Mac OS X")
  	if(OSX_NATIVE_ARCHITECTURE STREQUAL "arm64")
@@ -20,7 +31,7 @@ index 4b33b85e9..e2d16aeb5 100644
          set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --target=arm64-apple-macos12.0.1")
  	else()
  		# to be compatible back to Mac OS X 10.7
-@@ -455,30 +455,6 @@ if (NOT IQTREE_FLAGS MATCHES "single")
+@@ -455,30 +457,6 @@ if (NOT IQTREE_FLAGS MATCHES "single")
          endif()
      endif()
  
@@ -51,7 +62,7 @@ index 4b33b85e9..e2d16aeb5 100644
      if (VCC)
          set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /openmp")
          include_directories("${PROJECT_SOURCE_DIR}/pll") # for PThreads headers
-@@ -505,7 +481,6 @@ if (NOT IQTREE_FLAGS MATCHES "single")
+@@ -505,7 +483,6 @@ if (NOT IQTREE_FLAGS MATCHES "single")
              #The problem here is that LLVM installs either 64 bit or 32 bit libraries, but not both.
              #Though perhaps in debug builds this should be libiomp5md.lib
              set (LLVM_DIR "C:\\Projects\\LLVM_10")
@@ -59,7 +70,7 @@ index 4b33b85e9..e2d16aeb5 100644
  
              #Also need to ensure libomp.dll is in the path (or copied into the output directory).
              #(You want the one in ${LLVM_DIR}\\bin
-@@ -819,6 +794,39 @@ if (USE_CMAPLE STREQUAL "ON")
+@@ -819,6 +796,39 @@ if (USE_CMAPLE STREQUAL "ON")
  	)
  endif()
  
@@ -99,7 +110,7 @@ index 4b33b85e9..e2d16aeb5 100644
  if(Backtrace_FOUND)
    include_directories(${Backtrace_INCLUDE_DIR})
    target_link_libraries(iqtree2 ${Backtrace_LIBRARY})
-@@ -878,35 +886,9 @@ endif()
+@@ -878,35 +888,9 @@ endif()
  
  set(THREAD_LIB "")
  if (NOT IQTREE_FLAGS MATCHES "single")
@@ -135,7 +146,7 @@ index 4b33b85e9..e2d16aeb5 100644
  endif()
  
  # basic linking librararies
-@@ -1065,26 +1047,6 @@ if (WIN32)
+@@ -1065,26 +1049,6 @@ if (WIN32)
      if (USE_CMAPLE STREQUAL "ON")
      	install (FILES "${BINARY_DIR}/iqtree2-aa${EXE_SUFFIX}-click.exe" DESTINATION bin)
      endif()
