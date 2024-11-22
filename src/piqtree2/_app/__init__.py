@@ -10,6 +10,7 @@ from piqtree2 import (
     build_tree,
     fit_tree,
     jc_distances,
+    model_finder,
     nj_tree,
     random_trees,
 )
@@ -21,26 +22,33 @@ class piqtree_phylo:
     @extend_docstring_from(build_tree)
     def __init__(
         self,
-        substitution_model: str,
+        submod_type: str,
         freq_type: str | None = None,
         rate_model: str | None = None,
         *,
         invariant_sites: bool = False,
         rand_seed: int | None = None,
+        bootstrap_reps: int | None = None,
     ) -> None:
         self._model = Model(
-            substitution_model=substitution_model,
+            submod_type=submod_type,
             invariant_sites=invariant_sites,
             rate_model=rate_model,
             freq_type=freq_type,
         )
         self._rand_seed = rand_seed
+        self._bootstrap_reps = bootstrap_reps
 
     def main(
         self,
-        aln: cogent3.Alignment | cogent3.ArrayAlignment,
+        aln: c3_types.AlignedSeqsType,
     ) -> cogent3.PhyloNode | cogent3.app.typing.SerialisableType:
-        return build_tree(aln, self._model, self._rand_seed)
+        return build_tree(
+            aln,
+            self._model,
+            self._rand_seed,
+            bootstrap_replicates=self._bootstrap_reps,
+        )
 
 
 @composable.define_app
@@ -49,7 +57,7 @@ class piqtree_fit:
     def __init__(
         self,
         tree: cogent3.PhyloNode,
-        substitution_model: str,
+        submod_type: str,
         freq_type: str | None = None,
         rate_model: str | None = None,
         *,
@@ -58,7 +66,7 @@ class piqtree_fit:
     ) -> None:
         self._tree = tree
         self._model = Model(
-            substitution_model=substitution_model,
+            submod_type=submod_type,
             invariant_sites=invariant_sites,
             rate_model=rate_model,
             freq_type=freq_type,
@@ -67,7 +75,7 @@ class piqtree_fit:
 
     def main(
         self,
-        aln: cogent3.Alignment | cogent3.ArrayAlignment,
+        aln: c3_types.AlignedSeqsType,
     ) -> cogent3.PhyloNode | cogent3.app.typing.SerialisableType:
         return fit_tree(aln, self._tree, self._model, self._rand_seed)
 
@@ -84,9 +92,9 @@ def piqtree_random_trees(
 
 
 @composable.define_app
-@extend_docstring_from(nj_tree)
-def piqtree_jc_distances(
-    aln: cogent3.Alignment | cogent3.ArrayAlignment,
+@extend_docstring_from(jc_distances)
+def piqtree_jc_dists(
+    aln: c3_types.AlignedSeqsType,
 ) -> c3_types.PairwiseDistanceType:
     return jc_distances(aln)
 
@@ -97,10 +105,19 @@ def piqtree_nj(dists: c3_types.PairwiseDistanceType) -> cogent3.PhyloNode:
     return nj_tree(dists)
 
 
+@composable.define_app
+@extend_docstring_from(model_finder)
+def piqtree_mfinder(
+    aln: c3_types.AlignedSeqsType,
+) -> cogent3.PhyloNode | cogent3.app.typing.SerialisableType:
+    return model_finder(aln)
+
+
 _ALL_APP_NAMES = [
     "piqtree_phylo",
     "piqtree_fit",
     "piqtree_random_trees",
-    "piqtree_jc_distances",
+    "piqtree_jc_dists",
     "piqtree_nj",
+    "piqtree_mfinder",
 ]

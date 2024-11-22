@@ -43,20 +43,20 @@ def _edge_pars_for_cogent3(tree: cogent3.PhyloNode, model: Model) -> None:
     rate_pars = tree.params["edge_pars"]["rates"]
     motif_pars = {"mprobs": tree.params["edge_pars"]["mprobs"]}
     # renames parameters to conform to cogent3's naming conventions
-    if model.substitution_model in {DnaModel.JC, DnaModel.F81}:
+    if model.submod_type in {DnaModel.JC, DnaModel.F81}:
         # skip rate_pars since rate parameters are constant in JC and F81
         _insert_edge_pars(
             tree,
             **motif_pars,
         )
         return
-    if model.substitution_model in {DnaModel.K80, DnaModel.HKY}:
+    if model.submod_type in {DnaModel.K80, DnaModel.HKY}:
         rate_pars = {"kappa": rate_pars["A/G"]}
 
-    elif model.substitution_model is DnaModel.TN:
+    elif model.submod_type is DnaModel.TN:
         rate_pars = {"kappa_r": rate_pars["A/G"], "kappa_y": rate_pars["C/T"]}
 
-    elif model.substitution_model is DnaModel.GTR:
+    elif model.submod_type is DnaModel.GTR:
         del rate_pars["G/T"]
 
     # applies global rate parameters to each edge
@@ -189,14 +189,16 @@ def _process_tree_yaml(
 
     _rename_iq_tree(tree, names)
 
+    tree.name_unnamed_nodes()
+
     return tree
 
 
 def build_tree(
-    aln: cogent3.Alignment | cogent3.ArrayAlignment,
+    aln: c3_types.AlignedSeqsType,
     model: Model,
     rand_seed: int | None = None,
-    bootstrap_replicates: int = 0,
+    bootstrap_replicates: int | None = None,
 ) -> cogent3.PhyloNode:
     """Reconstruct a phylogenetic tree.
 
@@ -204,14 +206,14 @@ def build_tree(
 
     Parameters
     ----------
-    aln : Union[cogent3.Alignment, cogent3.ArrayAlignment]
+    aln : c3_types.AlignedSeqsType
         The sequence alignment.
     model : Model
         The substitution model with base frequencies and rate heterogeneity.
-    rand_seed : Optional[int], optional
+    rand_seed : int | None, optional
         The random seed - 0 or None means no seed, by default None.
     bootstrap_replicates : int, optional
-        The number of bootstrap replicates to perform, by default 0.
+        The number of bootstrap replicates to perform, by default None.
         If 0 is provided, then no bootstrapping is performed.
         At least 1000 is required to perform bootstrapping.
 
@@ -223,6 +225,9 @@ def build_tree(
     """
     if rand_seed is None:
         rand_seed = 0  # The default rand_seed in IQ-TREE
+
+    if bootstrap_replicates is None:
+        bootstrap_replicates = 0
 
     names = aln.names
     seqs = [str(seq) for seq in aln.iter_seqs(names)]
@@ -240,7 +245,7 @@ def build_tree(
 
 
 def fit_tree(
-    aln: cogent3.Alignment | cogent3.ArrayAlignment,
+    aln: c3_types.AlignedSeqsType,
     tree: cogent3.PhyloNode,
     model: Model,
     rand_seed: int | None = None,
@@ -252,13 +257,13 @@ def fit_tree(
 
     Parameters
     ----------
-    aln : Union[cogent3.Alignment, cogent3.ArrayAlignment]
+    aln : c3_types.AlignedSeqsType
         The sequence alignment.
     tree : cogent3.PhyloNode
         The topology to fit branch lengths to.
     model : Model
         The substitution model with base frequencies and rate heterogeneity.
-    rand_seed : Optional[int], optional
+    rand_seed : int | None, optional
         The random seed - 0 or None means no seed, by default None.
 
     Returns
@@ -302,6 +307,7 @@ def nj_tree(pairwise_distances: c3_types.PairwiseDistanceType) -> cogent3.PhyloN
     See Also
     --------
     jc_distances : construction of pairwise JC distance matrix from alignment.
+
     """
     newick_tree = iq_nj_tree(
         pairwise_distances.keys(),

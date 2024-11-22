@@ -1,4 +1,8 @@
-brew update
+# Check if running in GitHub Actions
+if [ "$GITHUB_ACTIONS" = "true" ]; then
+    brew update
+fi
+
 brew install make eigen boost libomp
 
 LLVM_BIN=$(brew --prefix llvm)/bin

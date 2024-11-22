@@ -12,6 +12,7 @@ class RateModel(ABC):
         -------
         str
             String parsable by IQ-TREE for the rate heterogeneity model.
+
         """
 
 
@@ -27,9 +28,10 @@ class RateType:
         Parameters
         ----------
         invariant_sites : bool, optional
-            Invariable Sites Model.
-        rate_model : Optional[RateModel]
-            Discrete Gamma Model or FreeRate Model.
+            Invariable Sites Model, by default False.
+        rate_model : RateModel | None, optional
+            Discrete Gamma Model or FreeRate Model, by default None.
+
         """
         self.invariant_sites = invariant_sites
         self.rate_model = rate_model
@@ -41,6 +43,7 @@ class RateType:
         -------
         str
             String parsable by IQ-TREE for the rate heterogeneity model.
+
         """
         rate_type_str = "I" if self.invariant_sites else ""
         if self.rate_model is None:
@@ -50,6 +53,10 @@ class RateType:
             rate_type_str += "+"
         return rate_type_str + self.rate_model.iqtree_str()
 
+    @property
+    def name(self) -> str:
+        return self.iqtree_str()
+
 
 class DiscreteGammaModel(RateModel):
     def __init__(self, rate_categories: int | None = None) -> None:
@@ -58,13 +65,14 @@ class DiscreteGammaModel(RateModel):
         Parameters
         ----------
         rate_categories : int, optional
-            The number of rate categories, by default 4
+            The number of rate categories, by default 4.
 
         References
         ----------
         .. [1] Yang, Ziheng. "Maximum likelihood phylogenetic estimation from
            DNA sequences with variable rates over sites: approximate methods."
            Journal of Molecular evolution 39 (1994): 306-314.
+
         """
         self.rate_categories = rate_categories
 
@@ -81,7 +89,7 @@ class FreeRateModel(RateModel):
         Parameters
         ----------
         rate_categories : int, optional
-            The number of rate categories, by default 4
+            The number of rate categories, by default 4.
 
         References
         ----------
@@ -90,6 +98,7 @@ class FreeRateModel(RateModel):
         .. [2] Soubrier, Julien, et al. "The influence of rate heterogeneity
            among sites on the time dependence of molecular rates." Molecular
            biology and evolution 29.11 (2012): 3345-3358.
+
         """
         self.rate_categories = rate_categories
 
@@ -140,6 +149,21 @@ def get_rate_type(
     *,
     invariant_sites: bool = False,
 ) -> RateType:
+    """Make a RateType from a chosen rate model and invariant sites.
+
+    Parameters
+    ----------
+    rate_model : str | RateModel | None, optional
+        The chosen rate model, by default None.
+    invariant_sites : bool, optional
+        Whether to use invariant sites, by default False.
+
+    Returns
+    -------
+    RateType
+        RateType generated from the rate model with invariant sites.
+
+    """
     if isinstance(rate_model, RateModel):
         return RateType(rate_model=rate_model, invariant_sites=invariant_sites)
 

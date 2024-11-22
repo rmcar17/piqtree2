@@ -11,17 +11,17 @@ class Model:
 
     def __init__(
         self,
-        substitution_model: str | SubstitutionModel,
+        submod_type: str | SubstitutionModel,
         freq_type: str | FreqType | None = None,
         rate_model: str | RateModel | None = None,
         *,
         invariant_sites: bool = False,
     ) -> None:
-        """Constructor for the model.
+        """Construct Model class.
 
         Parameters
         ----------
-        substitution_model : str |SubstitutionModel
+        submod_type : str | SubstitutionModel
             The substitution model to use
         freq_type : str | FreqType | None, optional
             State frequency specification, by default None. (defaults
@@ -29,16 +29,28 @@ class Model:
         rate_model : str | RateModel | None, optional
             Rate heterogeneity across sites model, by default
             no Gamma, and no FreeRate.
-        rate_type : bool, optional
-            Invariable sites.
+        invariant_sites : bool, optional
+            Invariable sites, by default False.
+
         """
-        self.substitution_model = get_substitution_model(substitution_model)
+        self.submod_type = get_substitution_model(submod_type)
         self.freq_type = get_freq_type(freq_type) if freq_type else None
         self.rate_type = (
             get_rate_type(rate_model, invariant_sites=invariant_sites)
             if rate_model is not None or invariant_sites
             else None
         )
+
+    def __hash__(self) -> int:
+        return hash(str(self))
+
+    def __repr__(self) -> str:
+        attrs = [
+            f"submod_type={getattr(self.submod_type, 'name', None)}",
+            f"freq_type={getattr(self.freq_type, 'name', None)}",
+            f"rate_type={getattr(self.rate_type, 'name', None)}",
+        ]
+        return f"Model({', '.join(attrs)})"
 
     def __str__(self) -> str:
         """Convert the model into the IQ-TREE representation.
@@ -47,10 +59,33 @@ class Model:
         -------
         str
             The IQ-TREE representation of the mode.
+
         """
         iqtree_extra_args = (
             x for x in (self.freq_type, self.rate_type) if x is not None
         )
-        return "+".join(
-            x.iqtree_str() for x in [self.substitution_model, *iqtree_extra_args]
-        )
+        return "+".join(x.iqtree_str() for x in [self.submod_type, *iqtree_extra_args])
+
+    @property
+    def rate_model(self) -> RateModel | None:
+        """The RateModel used, if one is chosen.
+
+        Returns
+        -------
+        RateModel | None
+            The RateModel used by the Model.
+
+        """
+        return self.rate_type.rate_model if self.rate_type else None
+
+    @property
+    def invariant_sites(self) -> bool:
+        """Whether invariant sites are used.
+
+        Returns
+        -------
+        bool
+            True if invariant sites are used by the model, False otherwise.
+
+        """
+        return self.rate_type.invariant_sites if self.rate_type else False
