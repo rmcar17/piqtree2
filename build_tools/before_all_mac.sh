@@ -10,7 +10,7 @@ export CC=$GCC_BIN
 export CXX=$GPP_BIN
 export LDFLAGS="-L$OMP_LIB"
 export CPPFLAGS="-I$OMP_INCLUDE"
-export OPENMP_C_FLAGS="-Xclang -fopenmp -L$OMP_LIB -I$OMP_INCLUDE"
+export OPENMP_C_FLAGS="-fopenmp -L$OMP_LIB -I$OMP_INCLUDE"
 export OPENMP_CXX_FLAGS="-Xclang -fopenmp -L$OMP_LIB -I$OMP_INCLUDE"
 
 bash build_tools/build_iqtree.sh
