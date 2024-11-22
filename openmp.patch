@@ -1,0 +1,12 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4b33b85e9..3b0077a6f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -468,6 +468,7 @@ if (NOT IQTREE_FLAGS MATCHES "single")
+         link_directories(${PROJECT_SOURCE_DIR}/liblinux_arm)
+         LIST(APPEND STATIC_LIBS "${PROJECT_SOURCE_DIR}/liblinux_arm/libomp.a" "${PROJECT_SOURCE_DIR}/liblinux_arm/libz.a")
+       else()
++        message("I assume this is the bad part")
+         link_directories(${PROJECT_SOURCE_DIR}/lib)
+         LIST(APPEND STATIC_LIBS "${PROJECT_SOURCE_DIR}/lib/libomp.a" "${PROJECT_SOURCE_DIR}/lib/libz.a")
+       endif()
