@@ -13,7 +13,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-14] #[ubuntu-latest, macos-13, macos-14] # Intel linux, Intel Mac, ARM Mac
+        os: [macos-13, macos-14] #[ubuntu-latest, macos-13, macos-14] # Intel linux, Intel Mac, ARM Mac
 
     steps:
       - uses: "actions/checkout@v4"
