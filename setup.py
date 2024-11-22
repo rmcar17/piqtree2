@@ -9,8 +9,9 @@ ext_modules = [
     Pybind11Extension(
         "_piqtree2",
         ["src/piqtree2/_libiqtree/_piqtree2.cpp"],
-        library_dirs=[LIBRARY_DIR],
-        libraries=["iqtree2", "z", "gomp"],
+        library_dirs=[LIBRARY_DIR, "/opt/homebrew/opt/libomp/lib"],
+        include_dirs=["/opt/homebrew/opt/libomp/include"],
+        libraries=["iqtree2", "z", "libomp"],
     ),
 ]
 
