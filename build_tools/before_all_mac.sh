@@ -3,7 +3,7 @@ if [ "$GITHUB_ACTIONS" = "true" ]; then
     brew update
 fi
 
-brew install llvm eigen boost libomp make
+brew install llvm eigen boost libomp@11.1.0 make
 
 export LDFLAGS="-L$(brew --prefix libomp)/lib"
 export CPPFLAGS="-I$(brew --prefix libomp)/include"
