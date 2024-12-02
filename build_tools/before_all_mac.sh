@@ -3,8 +3,8 @@ if [ "$GITHUB_ACTIONS" = "true" ]; then
     brew update
 fi
 
+brew install libomp.rb
 brew install llvm eigen boost make
-brew extract --version=11.1.0 libomp homebrew/cask-versions
 
 export LDFLAGS="-L$(brew --prefix libomp)/lib"
 export CPPFLAGS="-I$(brew --prefix libomp)/include"
