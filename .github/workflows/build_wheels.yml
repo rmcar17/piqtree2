@@ -33,6 +33,9 @@ jobs:
         uses: docker/setup-qemu-action@v3
         with:
           platforms: arm64
+      
+      - name: Tmp
+        run: brew search libomp@
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.22.0
